@@ -1,0 +1,59 @@
+<div class="content">
+  <div class="btn-control">
+    <button class="btn-connect green" *ngIf="!conectado" (click)="conectar()">
+      <i class="fas fa-plug"></i>
+    </button>
+    <button class="btn-connect red" *ngIf="conectado" (click)="desconectar()">
+      <i class="fas fa-comment-slash"></i>
+    </button>
+  </div>
+  <div class="card" *ngIf="conectado">
+    <div class="card-header">
+      <h5 class="m-0">
+        <span>Usuario Conectado:</span>
+        <span>{{ oMensaje.username }}</span>
+      </h5>
+    </div>
+    <div class="card-body">
+      <div #scrollChat [scrollTop]="scrollChat.scrollHeight" class="content-msg mb-3" style="overflow-y: scroll; height: 400px;">
+        <!-- [ngClass]="thisuser ? 'msg-right' : 'msg-left'" -->
+        <div class="i-msg" *ngFor="let mensaje of mensajes">
+          <p class="newuser" *ngIf="mensaje.tipo == 'NUEVO_USUARIO'">{{ mensaje.texto }}</p>
+          <span
+            *ngIf="mensaje.tipo == 'NUEVO_MENSAJE'"
+            class="badge badge-primary"
+            [ngStyle]="{ background: mensaje.color }"
+          >
+            {{ mensaje.username }}
+          </span>
+          <p *ngIf="mensaje.tipo == 'NUEVO_MENSAJE'">{{ mensaje.texto }}</p>
+          <div *ngIf="mensaje.tipo == 'NUEVO_MENSAJE'" class="timestamp">
+            {{ mensaje.fecha | date: "shortTime" }}
+          </div>
+        </div>
+
+      </div>
+      <form>
+        <div class="form-row">
+          <div class="form-group col-10">
+            <input
+              type="text"
+              [(ngModel)]="oMensaje.texto"
+              (keyup)="escribiendo()"
+              name="texto"
+              class="form-control"
+              placeholder="Typer your text"
+            />
+            <span class="writing">{{ writing }}</span>
+          </div>
+          <div class="form-group col-2">
+            <button class="btn btn-primary btn-block" (click)="enviarMensaje()">
+              <i class="fas fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+        
+      </form>
+    </div>
+  </div>
+</div>
